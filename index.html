@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Address</title>
+    <!-- Add your Google Maps API key here -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf1B5_HXa3eIn5WnDVeTlW3otRVIES2ko&libraries=places"></script>
+    <script src="pointquery.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <h1>Check if Your Address Can Receive Service:</h1>
+    <h2>We provide fiber-optic and wireless internet to homes and businesses across Northern Indiana. Search your address below to see service availability and pricing.</h2>
+    <form id="addressForm">
+        <input type="text" id="addressInput" placeholder="Start typing your address" />
+        <button type="button" onclick="checkAddress()">Check Address</button>
+    </form>
+
+
+   <div id="resultContainer">
+        <div class="loading-spinner">
+            <img src="icons/CFN_loading.png" alt="Loading Icon">
+        </div>
+    </div> <!-- New result container -->
+
+
+    <script>
+        function initAutocomplete() {
+            var input = document.getElementById('addressInput');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+        }
+
+        function checkAddress() {
+        var address = document.getElementById('addressInput').value;
+
+        if (address.trim() === "") {
+            alert("Please enter a valid address.");
+            return;
+        }
+
+        // Use Google Maps Geocoding API to get coordinates from the address
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: address }, function (results, status) {
+            if (status === 'OK' && results[0]) {
+                var coordinates = results[0].geometry.location;
+                console.log("Coordinates:", coordinates);
+
+                // Call the new endpoint to get the tag for the coordinates
+                getTagForCoordinates(coordinates.lat(), coordinates.lng());
+            } else {
+                // Display error message
+                document.getElementById('resultContainer').innerHTML = '<p>Error: Geocoding failed.</p>';
+            }
+        });
+    }
+
+    // Add a new function to fetch the tag for coordinates
+    function getTagForCoordinates(latitude, longitude) {
+        // Replace the URL with your actual server endpoint
+        var url = `http://localhost:3000/getTagForCoordinates?latitude=${latitude}&longitude=${longitude}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                    // Update the tagContainer with the retrieved tag
+                    setBackgroundColorBasedOnTag(data.tag)
+    
+            });
+        }
+
+
+        
+    function setBackgroundColorBasedOnTag(tag) {
+        // Define mapping of tags to background colors
+        const colorMap = {
+            'Future': 'lightblue',
+            'Completed': 'lightgreen',
+            'Developing': 'yellow',
+        
+
+            // Add more tag-color mappings as needed
+        };
+
+        // Get the body element
+        var body = document.body;
+
+        // Set background color based on the tag
+        if(tag){
+            body.style.backgroundColor = colorMap[tag];
+        }
+        else
+            body.style.backgroundColor = '$';
+       
+    }
+
+    initAutocomplete();
+    </script>
+
+
+</body>
+</html>

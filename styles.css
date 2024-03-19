@@ -1,0 +1,91 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    font-size: 15;
+    text-align: center;
+    color: #333;
+    padding: 10px;
+    margin: 10px;
+}
+#addressForm {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden; /* Ensure child elements respect border-radius */
+    display: flex;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Curved edges */
+}
+
+button {
+    background-color: #009449;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px; /* Curved edges */
+    cursor: pointer;
+    height: 90%;
+}
+
+#resultContainer {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+p {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    opacity: 100;
+}
+
+.loading-spinner img {
+    animation: spin 2s linear infinite; /* Add spinning animation */
+    height: auto;
+    width: 50px;
+}
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
