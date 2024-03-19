@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     connectionLimit: 10, // Adjust as needed based on your server capacity
 });
 
+
 // Wrap the insertPolygon function in a promise for better async handling
 function insertPolygon(polygonGeometry, color, tag) {
     return new Promise((resolve, reject) => {
