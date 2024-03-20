@@ -6,7 +6,6 @@ const cors = require('cors');  // Add this line
 const app = express();
 const port = 3000;
 
-
 // Middleware to parse JSON requests
 app.use(express.json());
 app.use(cors());  // Add this line to enable CORS
@@ -20,10 +19,31 @@ app.get('/', (req, res) => {
 const pool = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: 'jxf9dvlt',
+    password: 'Giant$win2024!',
     database: 'mydb'
 });
 // Import necessary modules and setup your server
+
+// Endpoint to save address, tag, latitude, and longitude to the database
+app.post('/saveAddressTag', (req, res) => {
+    const { address, tag, latitude, longitude } = req.body;
+
+    const query = `
+        INSERT INTO address_tags (address, tag, latitude, longitude)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    pool.query(query, [address, tag, latitude, longitude], (err, results) => {
+        if (err) {
+            console.error('Error saving address tag to database:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            console.log('Address tag saved to database');
+            res.status(200).json({ success: true });
+        }
+    });
+});
+
 
 // Add a new endpoint to get the tag for a specific set of coordinates
 app.get('/getTagForCoordinates', (req, res) => {
