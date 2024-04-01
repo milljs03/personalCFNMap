@@ -56,57 +56,20 @@
         });
     }
 
-    // Add a new function to fetch the tag for coordinates and store the address information in the database
-// Add a new function to fetch the tag for coordinates and store the address information in the database
-function getTagForCoordinates(latitude, longitude) {
-    // Retrieve the address from the input field
-    var address = document.getElementById('addressInput').value;
+    // Add a new function to fetch the tag for coordinates
+    function getTagForCoordinates(latitude, longitude) {
+        // Replace the URL with your actual server endpoint
+        var url = `http://localhost:3000/getTagForCoordinates?latitude=${latitude}&longitude=${longitude}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                    // Update the tagContainer with the retrieved tag
+                    setBackgroundColorBasedOnTag(data.tag)
     
-    // Replace the URL with your actual server endpoint
-    var url = `http://localhost:3000/getTagForCoordinates?latitude=${latitude}&longitude=${longitude}&address=${encodeURIComponent(address)}`;
+            });
+        }
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            // Update the tagContainer with the retrieved tag
-            setBackgroundColorBasedOnTag(data.tag);
-
-            // Save address, tag, latitude, and longitude to the database
-            saveAddressTagToDatabase(address, data.tag, latitude, longitude);
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            // Display error message
-            document.getElementById('tagContainer').innerHTML = '<p>Error: Something went wrong.</p>';
-        });
-}
-
-
-function saveAddressTagToDatabase(address, tag, latitude, longitude) {
-    // Make an AJAX request to your server to save the data
-
-    tag = tag || 'none';
-
-    fetch('http://localhost:3000/saveAddressTag', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            address: address,
-            tag: tag,
-            latitude: latitude,
-            longitude: longitude
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Address tag saved to database:', data);
-    })
-    .catch(error => {
-        console.error('Error saving address tag to database:', error);
-    });
-}
 
         
     function setBackgroundColorBasedOnTag(tag) {
