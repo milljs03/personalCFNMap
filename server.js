@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 const pool = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: 'Giant$win2024!',
+    password: 'Gas!Lighter2',
     database: 'mydb'
 });
 // Import necessary modules and setup your server
