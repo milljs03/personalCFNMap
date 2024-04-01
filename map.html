@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -16,6 +15,7 @@
         <img src="icons/community-fiber-logo.png">
     </h1>
     <div id="map"></div>
+    <input type="text" id="address-input" />
     <div id="map-controls">
         <label class="switch">
             <input type="checkbox" id="modeSwitch" onchange="toggleEditMode()">
@@ -43,18 +43,7 @@
         </select>
         
     </div>
-    <form id="addressForm">
-        <input type="text" id="address-input" placeholder="Start typing your address" />
-      </form>
-    <script>
-          function initAutocomplete() {
-            var input = document.getElementById('address-input');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-        }
-
-    initAutocomplete();
-    </script>
-
+   
 
     <!-- Replace YOUR_API_KEY with your actual API key -->
     <script src="https://unpkg.com/wellknown@0.6.1"></script>

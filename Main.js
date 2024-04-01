@@ -7,13 +7,14 @@ var selectedPolygon = null;
 var editMode = false;
 var mode = 'view';
 
-if (typeof document !== 'undefined') {
+if (typeof document !== 'undefined' ) {
     document.getElementById('address-input').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             findAddress();
         }
     });
 }
+
 
 function initMap() {
     var mapOptions = {
@@ -52,16 +53,19 @@ function initMap() {
             google.maps.event.addListener(newPolygon, 'click', function () {
                 selectPolygon(newPolygon);
             });
-            google.maps.event.addListener(polygon, 'dragend', function () {
-                polygon.isModified = true;
-            });
-            
-            google.maps.event.addListener(polygon.getPath(), 'set_at', function () {
-                polygon.isModified = true;
-            });
     
             // Add listener for polygon edits
-        
+            google.maps.event.addListener(newPolygon.getPath(), 'set_at', function () {
+                newPolygon.isModified = true
+            });
+    
+            google.maps.event.addListener(newPolygon.getPath(), 'insert_at', function () {
+                newPolygon.isModified = true
+            });
+
+            google.maps.event.addListener(newPolygon, 'dragend', function () {
+                newPolygon.isModified = true;
+            });
             
         }
         
@@ -73,6 +77,8 @@ function initMap() {
     // Add a button to toggle edit mode
     
 }
+
+
 
 
 async function loadPolygonsFromDatabase() {
@@ -95,12 +101,12 @@ function drawPolygonOnMap(polygon) {
     // Set isSaved to true
     polygon.isSaved = true;
 
-    google.maps.event.addListener(polygon, 'dragend', function () {
-        polygon.isModified = true;
+    google.maps.event.addListener(newPolygon, 'dragend', function () {
+        newPolygon.isModified = true;
     });
     
-    google.maps.event.addListener(polygon.getPath(), 'set_at', function () {
-        polygon.isModified = true;
+    google.maps.event.addListener(newPolygon.getPath(), 'set_at', function () {
+        newPolygon.isModified = true;
     });
 
     // Optionally, you can add click event listener or other customization here
@@ -380,7 +386,6 @@ async function savePolygons() {
             updatePolygon(polygon);
             polygon.isModified = false;
         }
-    
 
         
         if (polygon.isSaved) {
@@ -489,6 +494,7 @@ function createPolygonsFromData(polygonsData) {
 
             // Save additional data with the polygon
             newPolygon.isSaved = true;
+            newPolygon.isModified = false;
             newPolygon.insertId = polygonData.id;
 
             console.log('Polygon created:', newPolygon);
@@ -508,3 +514,4 @@ function loadSavedPolygons() {
 }
 
 initMap();
+
