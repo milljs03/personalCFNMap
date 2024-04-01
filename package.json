@@ -9,9 +9,13 @@
   },
   "keywords": [],
   "author": "",
+<<<<<<< HEAD
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "mysql2": "^3.9.3"
   }
+=======
+  "license": "ISC"
+>>>>>>> origin/main
 }

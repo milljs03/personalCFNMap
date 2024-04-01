@@ -1,14 +1,14 @@
 const mysql = require('mysql2');
 
-// Create a connection pool
+
+// Create a connection pool 
 const pool = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: 'jxf9dvlt',
+    password: 'Gas!Lighter2',
     database: 'mydb',
-    connectionLimit: 10, // Adjust as needed based on your server capacity
+    connectionLimit: 50, // Adjust as needed based on your server capacity
 });
-
 
 // Wrap the insertPolygon function in a promise for better async handling
 function insertPolygon(polygonGeometry, color, tag) {
