@@ -1,7 +1,7 @@
 /* styles.css */
 
 #map {
-    height: 550px;
+    height: 800px;
     width: 100%; /* Adjust as needed */
     position: relative; /* Relative positioning for container */
 }
@@ -152,4 +152,24 @@ h1 img {
 #modeSwitch:checked + .slider .edit-icon {
     opacity: 1;
     transform: translateX(1px);
+}
+#address-input {
+    position: absolute;
+    top: 35px;
+    right: 100px; 
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    font-size: 16px; 
+}
+
+#addressForm {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden; /* Ensure child elements respect border-radius */
+    display: flex;
 }
