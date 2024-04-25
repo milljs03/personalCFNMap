@@ -40,7 +40,7 @@ Where the below code segment is found in classes server.js and polygonentry
    const pool = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: 'Giant$win2024!',
+    password: 'password',
     database: 'mydb'
 });
 
