@@ -15,7 +15,7 @@
 In folder terminal type: node server.js
    The below message should appear:
 
-   ##Server is running on port 3000
+   Server is running on port 3000
 
 3. **In mySQL when database mydb is set up, use the below queries to set up appropiate tables**
 
@@ -34,6 +34,15 @@ CREATE TABLE address_tags (
     longitude DECIMAL(11, 8) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+4. **Update information**
+Where the below code segment is found in classes server.js and polygonentry
+   const pool = mysql.createPool({
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'Giant$win2024!',
+    database: 'mydb'
+});
 
 
  Download Live Server extension on visual studio or a similar extension on IDE of choice
