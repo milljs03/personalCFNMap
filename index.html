@@ -4,27 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check Address</title>
-    <!-- Add your Google Maps API key here -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf1B5_HXa3eIn5WnDVeTlW3otRVIES2ko&libraries=places"></script>
- 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5UvzBe-bW6t15QpawOADRt88Vaovc5eE&libraries=places"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="new-header">
+        <a href="https://communityfiber.net/" target="_blank">
+            <img src="icons/community-fiber-logo.png" alt="Community Fiber Logo" class="logo">
+        </a>
+
+    </div>
+    <div class="service-check-container" id="service-check-container">
+        <h2>Can We Serve Your Address?</h2>
+        <h3>Check if your address can receive our services! We offer fast and reliable internet to areas within our coverage zone. Please enter your address to verify availability.</h3>
     
-    <h1>Check if Your Address Can Receive Service:</h1>
-    <h2>We provide fiber-optic and wireless internet to homes and businesses across Northern Indiana. Search your address below to see service availability and pricing.</h2>
-    <form id="addressForm">
-        <input type="text" id="addressInput" placeholder="Start typing your address" />
-        <button type="button" onclick="checkAddress()">Check Address</button>
-    </form>
+        <form id="addressForm">
+            <input type="text" id="addressInput" placeholder="Start typing your address" />
+        </form>
+        <button type="addressbutton" onclick="checkAddress()">Check Address</button>
+    </div>
 
-
-   <div id="resultContainer">
-        <div class="loading-spinner">
-            <img src="icons/CFN_loading.png" alt="Loading Icon">
-        </div>
-    </div> <!-- New result container -->
-
+    <div id="resultContainer"></div> <!-- New result container -->
 
     <script>
         function initAutocomplete() {
@@ -32,109 +32,127 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
         }
 
-        function checkAddress() {
-        var address = document.getElementById('addressInput').value;
+function checkAddress() {
+    var address = document.getElementById('addressInput').value;
 
-        if (address.trim() === "") {
-            alert("Please enter a valid address.");
-            return;
-        }
-
-        // Use Google Maps Geocoding API to get coordinates from the address
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ address: address }, function (results, status) {
-            if (status === 'OK' && results[0]) {
-                var coordinates = results[0].geometry.location;
-                console.log("Coordinates:", coordinates);
-
-                // Call the new endpoint to get the tag for the coordinates
-                getTagForCoordinates(coordinates.lat(), coordinates.lng());
-            } else {
-                // Display error message
-                document.getElementById('resultContainer').innerHTML = '<p>Error: Geocoding failed.</p>';
-            }
-        });
+    if (address.trim() === "") {
+        alert("Please enter a valid address.");
+        return;
     }
 
-    // Add a new function to fetch the tag for coordinates and store the address information in the database
-// Add a new function to fetch the tag for coordinates and store the address information in the database
-function getTagForCoordinates(latitude, longitude) {
-    // Retrieve the address from the input field
-    var address = document.getElementById('addressInput').value;
-    
-    // Replace the URL with your actual server endpoint
-    var url = `http://localhost:3000/getTagForCoordinates?latitude=${latitude}&longitude=${longitude}&address=${encodeURIComponent(address)}`;
+    // Hide the service check container once the address is entered
+    document.getElementById('service-check-container').style.display = 'none';
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            // Update the tagContainer with the retrieved tag
-            setBackgroundColorBasedOnTag(data.tag);
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: address }, function (results, status) {
+        if (status === 'OK' && results[0]) {
+            var coordinates = results[0].geometry.location;
+            console.log("Coordinates:", coordinates);
 
-            // Save address, tag, latitude, and longitude to the database
-            saveAddressTagToDatabase(address, data.tag, latitude, longitude);
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            // Display error message
-            document.getElementById('tagContainer').innerHTML = '<p>Error: Something went wrong.</p>';
-        });
-}
+            // Store the address in the database
+            storeAddressInDatabase(address);
 
-
-function saveAddressTagToDatabase(address, tag, latitude, longitude) {
-    // Make an AJAX request to your server to save the data
-
-    tag = tag || 'none';
-
-    fetch('http://localhost:3000/saveAddressTag', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            address: address,
-            tag: tag,
-            latitude: latitude,
-            longitude: longitude
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Address tag saved to database:', data);
-    })
-    .catch(error => {
-        console.error('Error saving address tag to database:', error);
+            // Call the new endpoint to get the tag for the coordinates
+            getTagForCoordinates(coordinates.lat(), coordinates.lng(), address);
+        } else {
+            document.getElementById('resultContainer').innerHTML = '<p>Error: Geocoding failed.</p>';
+        }
     });
 }
 
-        
-    function setBackgroundColorBasedOnTag(tag) {
-        // Define mapping of tags to background colors
-        const colorMap = {
-            'Future': 'lightblue',
-            'Completed': 'lightgreen',
-            'Developing': 'yellow',
-        
+function storeAddressInDatabase(address) {
+    const url = "http://localhost:3000/storeAddress"; // Your backend endpoint
+    const data = { address: address };
 
-            // Add more tag-color mappings as needed
-        };
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Address stored successfully:", data);
+    })
+    .catch(error => {
+        console.error('Error storing address:', error);
+    });
+}
 
-        // Get the body element
-        var body = document.body;
 
-        // Set background color based on the tag
-        if(tag){
-            body.style.backgroundColor = colorMap[tag];
+        function getTagForCoordinates(latitude, longitude, address) {
+            const url = `http://localhost:3000/getTagForCoordinates?latitude=${latitude}&longitude=${longitude}&address=${encodeURIComponent(address)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.tag === null || data.tag === undefined) {
+                        loadSorryPage(address);
+                    } else {
+                        loadPricingPage(address);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                    alert('Something went wrong. Please try again.');
+                });
         }
-        else
-            body.style.backgroundColor = '$';
-       
-    }
 
-    initAutocomplete();
+        function loadSorryPage(address) {
+            window.location.href = `sorry.html?address=${encodeURIComponent(address)}`;
+        }
+
+        function loadPricingPage(address) {
+            window.location.href = `pricing.html?address=${encodeURIComponent(address)}`;
+        }
+
+        initAutocomplete();
     </script>
 
-
+    <!-- Embedded Footer -->
+    <div class="footer-container">
+        <footer class="fusion-footer-widget-area fusion-widget-area">
+            <div class="fusion-row">
+                <div class="fusion-columns fusion-columns-2 fusion-widget-area">
+                    <div class="fusion-column col-lg-6 col-md-6 col-sm-6">
+                        <section id="text-3" class="fusion-footer-widget-column widget widget_text">
+                            <h4 class="widget-title fusion-responsive-typography-calculated" data-fontsize="15" style="--fontSize: 15; line-height: 1; --minFontSize: 15;" data-lineheight="15px">
+                                Contact Information:
+                            </h4>
+                            <div class="textwidget">
+                                <p>For sales, service, or to report a problem call: 574-533-4237 or<br>toll free: 844-New-Fiber (844-639-3423)</p>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </section>
+                    </div>
+                    <div class="fusion-column fusion-column-last col-lg-6 col-md-6 col-sm-6">
+                        <style type="text/css" data-id="text-4">
+                            @media (max-width: 800px) {#text-4 {text-align: initial !important;}}
+                        </style>
+                        <section id="text-4" class="fusion-widget-mobile-align-initial fusion-widget-align-right fusion-footer-widget-column widget widget_text" style="border-style: solid; text-align: right; border-color: transparent; border-width: 0px;">
+                            <div class="textwidget">
+                                <p><a href="https://communityfiber.net/internet-policies/"><strong>NPT / CFN Open Internet Policies</strong></a></p>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </section>
+                    </div>
+                    <div class="fusion-clearfix"></div>
+                </div>
+            </div>
+        </footer>
+        <footer id="footer" class="fusion-footer-copyright-area">
+            <div class="fusion-row">
+                <div class="fusion-copyright-content">
+                    <div class="fusion-copyright-notice" style="padding-bottom: 0px;">
+                        <div>
+                            Copyright 2024 Community Fiber Network - an NPTech Company | 19066 Market St / PO Box 47, New Paris IN 46553
+                        </div>
+                    </div>
+                    <div class="fusion-social-links-footer" style="display: none;"></div>
+                </div>
+            </div>
+        </footer>
+    </div>
 </body>
 </html>

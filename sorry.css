@@ -1,0 +1,126 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f0f0f0;
+}
+
+h2 {
+    font-size: 25px;
+    text-align: center;
+    color: #333;
+    padding: 10px;
+    margin: 10px;
+}
+
+.new-header {
+    background-color: #f0f0f0; /* Adjust to match your background color */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distributes space between logo and text */
+    width: 100%;
+    position: fixed; /* Fixes the header at the top */
+    top: 0; /* Ensures it stays at the top of the page */
+    left: 0; /* Ensures it spans the full width */
+    z-index: 1000; /* Makes sure it's on top of other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+.new-header .logo {
+    height: 40px; /* Adjust size of logo as needed */
+    margin-right: 15px;
+}
+
+.new-header p {
+    color: #272727;
+    font-size: 16px;
+    margin-right: 16px;
+    text-align: center; /* Center text horizontally */
+    margin-top: 8px;
+}
+
+.sorry-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 90px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form label {
+    font-size: 1rem;
+    color: #12642b;
+    border-color: #333;
+    margin-bottom: 5px;
+    text-align: left; /* Ensures labels are aligned to the left */
+    width: 100%; /* Take full width to align correctly */
+}
+
+
+form input, form button {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #4cae4c;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #388e3c;
+}
+
+
+.footer-container {
+    background-color: #505050; /* Dark gray background */
+    color: #fff; /* White text color */
+    padding: 20px 20px; /* Padding for spacing */
+    width: 100%;
+    margin-top: 100px; /* Pushes footer to the bottom */
+    position: relative; /* Keeps it positioned normally within flow */
+    box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+footer {
+    display: block;
+}
+
+
+.footer-container a {
+    color: #fff; /* White color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.footer-container a:hover {
+    text-decoration: underline; /* Add underline on hover for links */
+}

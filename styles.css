@@ -3,29 +3,108 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    height: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f0f0f0; /* Optional: Background for page */
 }
 
-h1 {
+h1, h2 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
 h2 {
-    font-size: 15;
-    text-align: center;
-    color: #333;
-    padding: 10px;
-    margin: 10px;
+    margin-top: 70px;
+    font-size: 42px;
+
 }
-#addressForm {
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden; /* Ensure child elements respect border-radius */
+.new-header {
+    background-color: #f0f0f0; /* Adjust to match your background color */
+    padding: 10px;
     display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distributes space between logo and text */
+    width: 100%;
+    position: fixed; /* Fixes the header at the top */
+    top: 0; /* Ensures it stays at the top of the page */
+    left: 0; /* Ensures it spans the full width */
+    z-index: 1000; /* Makes sure it's on top of other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+.new-header .logo {
+    height: 40px; /* Adjust size of logo as needed */
+    margin-right: 15px;
+}
+
+.new-header p {
+    color: #272727;
+    font-size: 16px;
+    margin-right: 16px;
+    text-align: center; /* Center text horizontally */
+    margin-top: 8px;
+}
+
+
+
+#addressForm {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    width: 100%;
+}
+
+
+h3 {
+    font-size: 25px;
+    color: #ffffff;
+    padding-left: 70px; /* Added padding to the left side */
+    padding-right: 70px; /* Added padding to the right side */
+    font-weight: normal;
+}
+
+
+
+button {
+    background-color: #fff;
+    color:  #009449;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    line-height: 22px;
+    width: 600px;
+    font-size: 14px;
+    font-weight: bold;
+
+}
+
+button:hover {
+    background-color: #e9e9e9;
+}
+
+button:active {
+    background-color: #388e3c;
 }
 
 label {
@@ -33,59 +112,52 @@ label {
     margin-bottom: 10px;
 }
 
-input {
-    flex: 1;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 5px; /* Curved edges */
-}
-
-button {
-    background-color: #009449;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px; /* Curved edges */
-    cursor: pointer;
-    height: 90%;
-}
-
-#resultContainer {
-    max-width: 400px;
-    margin: 20px auto;
+#service-check-container, .sorry-container {
+    width: 1000px;
+    margin: auto;
+    height: 450px;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    background-color: #2e914f;
+    background-image: url('icons/greenbackground.png'); /* Add background image */
+    background-size: cover; /* Makes sure the image covers the entire container */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 80px;
 }
 
-p {
-    margin: 0;
-    padding: 10px 0;
+
+.footer-container {
+    background-color: #808080; /* Dark gray background */
+    color: #fff; /* White text color */
+    padding: 20px 20px; /* Padding for spacing */
+    width: 100%;
+    margin-top: auto; /* Pushes footer to the bottom */
+    position: relative; /* Keeps it positioned normally within flow */
+    box-sizing: border-box; /* Includes padding in width calculation */
 }
 
-.loading-spinner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    opacity: 100;
+footer {
+    display: block;
 }
 
-.loading-spinner img {
-    animation: spin 2s linear infinite; /* Add spinning animation */
-    height: auto;
-    width: 50px;
+
+.footer-container a {
+    color: #fff; /* White color for links */
+    text-decoration: none; /* Remove underline from links */
 }
 
-@keyframes spin {
-
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.footer-container a:hover {
+    text-decoration: underline; /* Add underline on hover for links */
 }
+
+
+
+
+
+
+
+
+

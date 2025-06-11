@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorry - Address Not Available</title>
+    <link rel="stylesheet" href="sorry.css"> <!-- Link to sorry.css -->
+</head>
+<body>
+    <div class="new-header">
+        <a href="https://communityfiber.net/" target="_blank">
+            <img src="icons/community-fiber-logo.png" alt="Community Fiber Logo" class="logo">
+        </a>
+    </div>
+    <div class="sorry-container">
+        <h2>We're Sorry</h2>
+        <p>Unfortunately, we currently cannot provide service to your address. Please fill out the form below so we can double-check your address availability and notify you about future developments in your area!</p>
+        
+        <form id="infoForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" readonly>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Get the address from the query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const address = urlParams.get('address');
+        document.getElementById('address').value = address;
+
+        // Handle form submission
+        document.getElementById('infoForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+
+    // Send the data to the server
+    fetch('http://localhost:3000/submitForm', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, address }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Thank you! Your information has been submitted.');
+            window.location.href = 'index.html'; // Redirect back to the main page
+        } else {
+            alert('There was an error submitting your form.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error submitting your form.');
+    });
+});
+
+    </script>
+</body>
+
+<div class="footer-container">
+    <footer class="fusion-footer-widget-area fusion-widget-area">
+        <div class="fusion-row">
+            <div class="fusion-columns fusion-columns-2 fusion-widget-area">
+                <div class="fusion-column col-lg-6 col-md-6 col-sm-6">
+                    <section id="text-3" class="fusion-footer-widget-column widget widget_text">
+                        <h4 class="widget-title fusion-responsive-typography-calculated" data-fontsize="15" style="--fontSize: 15; line-height: 1; --minFontSize: 15;" data-lineheight="15px">
+                            Contact Information:
+                        </h4>
+                        <div class="textwidget">
+                            <p>For sales, service, or to report a problem call: 574-533-4237 or<br>toll free: 844-New-Fiber (844-639-3423)</p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                </div>
+                <div class="fusion-column fusion-column-last col-lg-6 col-md-6 col-sm-6">
+                    <style type="text/css" data-id="text-4">
+                        @media (max-width: 800px) {#text-4 {text-align: initial !important;}}
+                    </style>
+                    <section id="text-4" class="fusion-widget-mobile-align-initial fusion-widget-align-right fusion-footer-widget-column widget widget_text" style="border-style: solid; text-align: right; border-color: transparent; border-width: 0px;">
+                        <div class="textwidget">
+                            <p><a href="https://communityfiber.net/internet-policies/"><strong>NPT / CFN Open Internet Policies</strong></a></p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                </div>
+                <div class="fusion-clearfix"></div>
+            </div>
+        </div>
+    </footer>
+    <footer id="footer" class="fusion-footer-copyright-area">
+        <div class="fusion-row">
+            <div class="fusion-copyright-content">
+                <div class="fusion-copyright-notice" style="padding-bottom: 0px;">
+                    <div>
+                        Copyright 2024 Community Fiber Network - an NPTech Company | 19066 Market St / PO Box 47, New Paris IN 46553
+                    </div>
+                </div>
+                <div class="fusion-social-links-footer" style="display: none;"></div>
+            </div>
+        </div>
+    </footer>
+</div>
+</html>

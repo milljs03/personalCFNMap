@@ -1,30 +1,39 @@
 // server.js
-
 const express = require('express');
 const mysql = require('mysql2');
-const cors = require('cors');  // Add this line
+const cors = require('cors');
+const dotenv = require('dotenv');
 const app = express();
 const port = 3000;
 
+// Load environment variables from a .env file
+dotenv.config();
+
+const googleApiKey = process.env.GOOGLE_API_KEY;
 // Middleware to parse JSON requests
 app.use(express.json());
-app.use(cors());  // Add this line to enable CORS
 
+// CORS configuration to allow requests from communityfiber.net
+app.use(cors({
+    origin: 'https://communityfiber.net',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
+
+// MySQL database connection pool setup
+const pool = mysql.createPool({
+    host: process.env.DB_HOST || '127.0.0.1',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'mydb'
+});
+
+// Handle GET request to the root
 app.get('/', (req, res) => {
     res.send('Hello, this is your Express server.');
 });
 
-
-// Initialize MySQL connection pool
-const pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'Giant$win2024!',
-    database: 'mydb'
-});
-// Import necessary modules and setup your server
-
-// Endpoint to save address, tag, latitude, and longitude to the database
+// Save address, tag, latitude, and longitude to the database
 app.post('/saveAddressTag', (req, res) => {
     const { address, tag, latitude, longitude } = req.body;
 
@@ -33,7 +42,7 @@ app.post('/saveAddressTag', (req, res) => {
         VALUES (?, ?, ?, ?)
     `;
 
-    pool.query(query, [address, tag, latitude, longitude], (err, results) => {
+    pool.execute(query, [address, tag, latitude, longitude], (err, results) => {
         if (err) {
             console.error('Error saving address tag to database:', err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -44,8 +53,7 @@ app.post('/saveAddressTag', (req, res) => {
     });
 });
 
-
-// Add a new endpoint to get the tag for a specific set of coordinates
+// Get the tag for a specific set of coordinates
 app.get('/getTagForCoordinates', (req, res) => {
     const { latitude, longitude } = req.query;
 
@@ -60,7 +68,6 @@ app.get('/getTagForCoordinates', (req, res) => {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
-            // Check if any polygon contains the point
             if (results.length > 0) {
                 const tag = results[0].tag;
                 console.log(`Tag for coordinates: ${latitude}, ${longitude} is ${tag}`);
@@ -73,42 +80,7 @@ app.get('/getTagForCoordinates', (req, res) => {
     });
 });
 
-
-app.get('/checkPointInPolygon', (req, res) => {
-    const { latitude, longitude } = req.query;
-
-    // Use your existing checkPointInPolygon function here
-    checkPointInPolygon(parseFloat(latitude), parseFloat(longitude), res);
-    function checkPointInPolygon(latitude, longitude) {
-        const query = `
-            SELECT tag
-            FROM mydb.polygons
-            WHERE ST_CONTAINS(polygon_geometry, POINT(?, ?))
-        `;
-    
-        pool.query(query, [longitude, latitude], (err, results) => {
-            if (err) {
-                throw err;
-            }
-    
-            // Check if any polygon contains the point
-            if (results.length > 0) {
-                const tag = results[0].tag;
-                console.log(`Point is inside the polygon with tag: ${tag}`);
-            } else {
-                console.log('Point is not inside any polygon.');
-            }
-    
-            // Close the connection to the MySQL database
-            
-        });
-    }
-
-});
-
-// Continue with the rest of your server.js
-
-// Endpoint to insert a polygon
+// Insert a polygon
 app.post('/insertPolygon', (req, res) => {
     const { polygon_geometry, color, tag } = req.body;
 
@@ -121,20 +93,17 @@ app.post('/insertPolygon', (req, res) => {
         )
     `;
 
-    pool.query(query, [polygon_geometry, color, tag], (err, results) => {
+    pool.execute(query, [polygon_geometry, color, tag], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
             const insertId = results.insertId;
 
-            console.log('Insert result:', results); // Log the entire results object
-
             if (insertId !== undefined) {
                 console.log(`Polygon inserted successfully with id: ${insertId}`);
                 res.status(200).json({ insertId: insertId });
             } else {
-                // If insertId is undefined, fetch the last inserted ID separately
                 pool.query('SELECT LAST_INSERT_ID() as lastInsertId', (err, result) => {
                     if (err) {
                         console.error(err);
@@ -150,6 +119,7 @@ app.post('/insertPolygon', (req, res) => {
     });
 });
 
+// Delete a polygon by ID
 app.delete('/deletePolygon/:id', (req, res) => {
     const polygonId = req.params.id;
 
@@ -158,7 +128,7 @@ app.delete('/deletePolygon/:id', (req, res) => {
         WHERE id = ?
     `;
 
-    pool.query(query, [polygonId], (err, results) => {
+    pool.execute(query, [polygonId], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -169,6 +139,7 @@ app.delete('/deletePolygon/:id', (req, res) => {
     });
 });
 
+// Update a polygon by ID
 app.put('/updatePolygon/:id', (req, res) => {
     const polygonId = req.params.id;
     const { polygon_geometry, color, tag } = req.body;
@@ -179,7 +150,7 @@ app.put('/updatePolygon/:id', (req, res) => {
         WHERE id = ?
     `;
 
-    pool.query(query, [polygon_geometry, color, tag, polygonId], (err, results) => {
+    pool.execute(query, [polygon_geometry, color, tag, polygonId], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -190,13 +161,14 @@ app.put('/updatePolygon/:id', (req, res) => {
     });
 });
 
+// Get all polygons
 app.get('/getPolygons', (req, res) => {
     const query = `
         SELECT id, ST_AsText(polygon_geometry) AS polygon_geometry, color, tag
         FROM polygons
     `;
 
-    pool.query(query, (err, results) => {
+    pool.execute(query, (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -207,12 +179,48 @@ app.get('/getPolygons', (req, res) => {
                 color: row.color,
                 tag: row.tag,
             }));
-            console.log("sending over data..")
             res.json({ polygons });
         }
     });
 });
 
+// Handle form submission
+app.post('/submitForm', (req, res) => {
+    const { name, email, address } = req.body;
+
+    if (!name || !email || !address) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const query = 'INSERT INTO addresses (address) VALUES (?)';
+    pool.execute(query, [address], (err, result) => {
+        if (err) {
+            console.error('Error inserting address:', err);
+            return res.status(500).send('Failed to store address');
+        }
+        res.status(200).json({ message: 'Address stored successfully' });
+    });
+});
+
+// Handle signup form submission
+app.post('/signup', (req, res) => {
+    const { name, email, phone, address, plan } = req.body;
+    
+    if (!name || !email || !phone || !address || !plan) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const insertSignupQuery = 'INSERT INTO signups (name, email, phone, address, plan) VALUES (?, ?, ?, ?, ?)';
+    pool.execute(insertSignupQuery, [name, email, phone, address, plan], (err, results) => {
+        if (err) {
+            console.error('Error saving signup data:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        console.log('Signup saved successfully');
+        res.status(200).json({ success: true, message: 'Sign up successful!' });
+    });
+});
 
 // Start the server
 app.listen(port, () => {

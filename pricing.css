@@ -1,0 +1,230 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f0f0f0; /* Optional: Background for page */
+}
+
+#resultContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    margin-top: 20px;
+}
+/* New Header Styling */
+.new-header {
+    background-color: #f0f0f0; /* Adjust to match your background color */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distributes space between logo and text */
+    width: 100%;
+    position: fixed; /* Fixes the header at the top */
+    top: 0; /* Ensures it stays at the top of the page */
+    left: 0; /* Ensures it spans the full width */
+    z-index: 1000; /* Makes sure it's on top of other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+.new-header .logo {
+    height: 40px; /* Adjust size of logo as needed */
+    margin-right: 15px;
+}
+
+.new-header p {
+    color: #272727;
+    font-size: 16px;
+    margin-right: 16px;
+    text-align: right; /* Ensures text is aligned to the right */
+}
+
+
+
+.header-box {
+    background-color: #2e914f; /* Green background */
+    color: white; /* White text */
+    padding: 20px 0; /* Padding to add space around the text */
+    text-align: center; /* Center the text */
+    width: 100%; /* Make it stretch across the full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+    margin-top: 80px;
+}
+
+.header-box h1 {
+    font-size: 24px; /* Adjust font size */
+    margin: 0; /* Remove default margin */
+}
+
+
+button {
+    background-color: #009449;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    line-height: 22px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #388e3c;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.pricing-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    width: 30%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pricing-box .panel-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.pricing-box .panel-body {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #009449;
+    margin: 10px 0;
+}
+
+.pricing-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.pricing-box li {
+    margin: 5px 0;
+    color: #666;
+}
+
+.speed-features {
+    margin-top: 10px;
+    font-size: 22px;
+    color: #666;
+}
+
+.speed-capability {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+.shimmer {
+    background: linear-gradient(to right, #3cc982 6%, #009449 18%, #009449 33%);
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 35s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.service-check-container {
+    background-color: #d4f8d4;
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-check-container h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.service-check-container p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.pdf-container {
+    width: 284px;
+    height: 581px;
+    overflow: hidden;
+    position: relative;
+}
+
+.pdf-container object {
+    width: 250px;
+    height: 500px;
+}
+
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-container {
+    background-color: #505050; /* Dark gray background */
+    color: #fff; /* White text color */
+    padding: 20px 20px; /* Padding for spacing */
+    width: 100%;
+    margin-top: 100px; /* Pushes footer to the bottom */
+    position: relative; /* Keeps it positioned normally within flow */
+    box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+footer {
+    display: block;
+}
+
+
+.footer-container a {
+    color: #fff; /* White color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.footer-container a:hover {
+    text-decoration: underline; /* Add underline on hover for links */
+}
