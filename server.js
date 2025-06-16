@@ -33,8 +33,22 @@ for (const varName of requiredEnvVars) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); // Important for Passport forms
 
+const allowedOrigins = [
+    'http://127.0.0.1:3000'    // For accessing the app directly
+];
+
 app.use(cors({
-    origin: 'http://127.0.0.1:5501',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        // Check if the origin is in our list of allowed origins
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type']
 }));
