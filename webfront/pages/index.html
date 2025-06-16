@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Address</title>
+  <link rel="stylesheet" href="/webfront/styling/styles.css" />
+</head>
+<body class="page-index">
+  <div class="header-placeholder" id="header-placeholder"></div>
+
+  <main>
+    <div class="service-check-container" id="service-check-container">
+      <h2>Can we serve your address?</h2>
+      <h3>
+        Check if your address can receive our services! We offer fast and reliable internet to areas within our coverage zone. Please enter your address to verify availability.
+      </h3>
+
+      <form id="addressForm">
+        <input type="text" id="addressInput" placeholder="Start typing your address" />
+        <button type="submit">Check Address</button>
+      </form>
+    </div>
+
+    <div id="resultContainer"></div>
+  </main>
+
+  <div class="footer-placeholder" id="footer-placeholder"></div>
+
+  <script>
+    let API_BASE_URL = '';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load configuration including API key and base URL
+      fetch('http://localhost:3000/api/config')
+        .then(res => res.json())
+        .then(config => {
+          API_BASE_URL = config.apiUrl;
+
+          // Load Google Maps with API key
+          const script = document.createElement('script');
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${config.apiKey}&libraries=places&callback=initAutocomplete`;
+          script.async = true;
+          document.head.appendChild(script);
+        })
+        .catch(err => {
+          console.error("Failed to load Google Maps API configuration:", err);
+          document.getElementById('resultContainer').innerHTML = '<p>Could not load mapping service. Please try again later.</p>';
+        });
+
+      // Form submission handler
+      const addressForm = document.getElementById('addressForm');
+      if (addressForm) {
+        addressForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          checkAddress();
+        });
+      }
+      });
+
+
+    function storeAddress(address) {
+      if (!API_BASE_URL) return;
+
+      fetch(`${API_BASE_URL}/storeAddress`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address: address })
+      })
+      .then(res => res.json())
+      .then(data => console.log(data.message))
+      .catch(error => console.error("Error storing address:", error));
+    }
+
+    function checkAddress() {
+      const address = document.getElementById('addressInput').value;
+      if (address.trim() === "") {
+        alert("Please enter a valid address.");
+        return;
+      }
+
+      document.getElementById('service-check-container').style.display = 'none';
+      storeAddress(address);
+
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: address }, function (results, status) {
+        if (status === 'OK' && results[0]) {
+          const location = results[0].geometry.location;
+          const lat = location.lat();
+          const lng = location.lng();
+          console.log(`Coordinates found: ${lat}, ${lng}`);
+          getTagForCoordinates(lat, lng, address);
+        } else {
+          console.error('Geocode failed:', status);
+          document.getElementById('resultContainer').innerHTML = `<p>We couldn't find that address. Please try again.</p>`;
+        }
+      });
+    }
+
+    function getTagForCoordinates(lat, lng, address) {
+      if (!API_BASE_URL) return;
+
+      const url = `${API_BASE_URL}/getTagForCoordinates?latitude=${lat}&longitude=${lng}`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.tag) {
+            console.log(`Serviceable area found with tag: ${data.tag}`);
+            loadPricingPage(address);
+          } else {
+            console.log('Address is not within a serviceable polygon.');
+            loadSorryPage(address);
+          }
+        })
+        .catch(error => {
+          console.error("Error checking for tag:", error);
+          alert("Something went wrong while checking your address. Please try again.");
+        });
+    }
+
+    window.initAutocomplete = function() {
+      const input = document.getElementById('addressInput');
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.setComponentRestrictions({ 'country': ['us'] });
+    };
+
+    function loadSorryPage(address) {
+      window.location.href = `sorry.html?address=${encodeURIComponent(address)}`;
+    }
+
+    function loadPricingPage(address) {
+      window.location.href = `pricing.html?address=${encodeURIComponent(address)}`;
+    }
+  </script>
+
+  <script src="/webfront/scripts/layout.js"></script>
+</body>
+</html>

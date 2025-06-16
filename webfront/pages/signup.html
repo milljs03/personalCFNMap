@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Details</title>
+<link rel="stylesheet" href="/webfront/styling/signup.css" />
+</head>
+<body>
+    <div class="header-placeholder"></div>
+
+    
+<div class="signup-layout">
+  <div class="sorry-container">
+    <h2>Great Pick!</h2>
+    <p>Next step is to provide us with some information so we can get you one step closer to your fiber internet!</p>
+
+    <form id="infoForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+      <label for="phone">Phone Number:</label>
+      <input type="phone" id="phone" name="phone" placeholder="Your Phone Number" required>
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" readonly>
+
+      <input type="hidden" id="plan" name="plan">
+
+      <h3>Please note: one of our employees will contact you shortly to confirm the information is correct.</h3>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+            
+    <div class="pricing-container">
+         <h4 class="pricing-label">You’ve selected:</h4>
+        <div class="pricing-box" data-plan="Standard">
+            <div class="panel-heading">Standard</div>
+            <div class="panel-body">
+                <span>$65/mo</span>
+                <div class="speed-features">
+                    <div>200 Mbps</div>
+                </div>
+                <div class="speed-capability">
+                    <div>(Down & Up)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-box" data-plan="Advanced">
+            <div class="panel-heading">Advanced</div>
+            <div class="panel-body">
+                <span>$80/mo</span>
+                <div class="speed-features">
+                    <div>500 Mbps</div>
+                </div>
+                <div class="speed-capability">
+                    <div>(Down & Up)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing-box" data-plan="Premium">
+            <div class="panel-heading">Premium</div>
+            <div class="panel-body">
+                <span class="shimmer">$89/mo</span>
+                <div class="speed-features">
+                    <div>1 Gbps</div>
+                </div>
+                <div class="speed-capability">
+                    <div>(Down & Up)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const address = params.get('address') || 'Your Address';
+    const plan = params.get('plan');
+
+    // Create a temporary element to sanitize the input
+    const sanitizer = document.createElement('div');
+    
+    // Sanitize the address by setting it as text content
+    sanitizer.textContent = address;
+    const sanitizedAddress = sanitizer.innerHTML;
+    
+    // Sanitize the plan
+    sanitizer.textContent = plan;
+    const sanitizedPlan = sanitizer.innerHTML;
+
+    // Set the sanitized values
+    document.getElementById('address').value = sanitizedAddress;
+    if (plan) {
+        document.getElementById('plan').value = sanitizedPlan;
+    }
+
+    // Display the selected plan pricing box
+    displaySelectedPlan(plan);
+});
+
+        // Function to display the selected plan
+        function displaySelectedPlan(plan) {
+            const pricingBoxes = document.querySelectorAll('.pricing-box');
+            pricingBoxes.forEach(box => {
+                const boxPlan = box.getAttribute('data-plan');
+                if (boxPlan === plan) {
+                    box.style.display = 'block';  // Show the selected plan
+                } else {
+                    box.style.display = 'none';  // Hide other plans
+                }
+            });
+        }
+    
+    document.getElementById("infoForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const plan = document.getElementById('plan').value;  // Ensure this gets the selected plan
+    // Create URLSearchParams with proper key-value pairs
+    const formData = new URLSearchParams();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('address', address);
+    formData.append('plan', plan);
+  
+    // Send the data to the server
+    fetch('http://localhost:3000/signup', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, phone, address, plan }),
+})
+
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Sign up successful!');
+            window.location.href = 'index.html'; // Redirect back to the main page
+        } else {
+            alert('Sign up failed!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+</script>
+    <div class="footer-placeholder"></div>
+</body>
+
+
+<script src="/webfront/scripts/layout.js"></script>
+
+</html>

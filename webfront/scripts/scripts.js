@@ -28,3 +28,22 @@ function handleSignUp(plan, address) {
     const url = `signup.html?plan=${encodeURIComponent(plan)}&address=${encodeURIComponent(address)}`;
     window.location.href = url;
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Fetch and inject the header
+    fetch('/webfront/pages/_includes/header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading the header:', error));
+
+    // Fetch and inject the footer
+    fetch('/_includes/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading the footer:', error));
+});

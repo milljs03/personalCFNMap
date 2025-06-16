@@ -35,14 +35,7 @@ CREATE TABLE address_tags (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-4. **Update information**
-Where the below code segment is found in classes server.js and polygonentry
-   const pool = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'password',
-    database: 'mydb'
-});
+
 
 
  Download Live Server extension on visual studio or a similar extension on IDE of choice

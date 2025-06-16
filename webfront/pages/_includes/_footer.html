@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Example</title>
+    
+    <style>
+        /* * This is the CSS to make the footer text white.
+         * I've added a dark background color to the main container 
+         * so the white text is visible.
+        */
+        .footer-container {
+            background-color: #2c3e50; /* Added a dark background for contrast */
+            padding: 2rem 1rem; /* Added some padding for better spacing */
+        }
+
+        /* * This targets all elements inside the footer container and sets their color to white.
+         * The asterisk (*) is a universal selector.
+         * We target the link (<a>) tag specifically to ensure it also becomes white.
+        */
+        .footer-container *, .footer-container a {
+            color: white;
+        }
+
+        /* * The original HTML uses some 'fusion' classes. 
+         * This part is just to replicate a basic two-column layout for the demo.
+        */
+        .fusion-row {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .fusion-columns-2 {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .fusion-copyright-content {
+            text-align: center;
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+        .widget-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="footer-container">
+      <footer class="fusion-footer-widget-area fusion-widget-area">
+        <div class="fusion-row">
+          <div class="fusion-columns fusion-columns-2 fusion-widget-area">
+            <div class="fusion-column col-lg-6 col-md-6 col-sm-6">
+              <section id="text-3" class="fusion-footer-widget-column widget widget_text">
+                <h4 class="widget-title">Contact Information:</h4>
+                <div class="textwidget">
+                  <p>For sales, service, or to report a problem call: 574-533-4237 or<br>toll free: 844-New-Fiber (844-639-3423)</p>
+                </div>
+              </section>
+            </div>
+            <div class="fusion-column col-lg-6 col-md-6 col-sm-6 fusion-column-last" style="text-align: right;">
+              <section id="text-4" class="fusion-footer-widget-column widget widget_text">
+                <div class="textwidget">
+                  <p><a href="https://communityfiber.net/internet-policies/"><strong>NPT / CFN Open Internet Policies</strong></a></p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </footer>
+    
+      <footer id="footer" class="fusion-footer-copyright-area">
+        <div class="fusion-row">
+          <div class="fusion-copyright-content">
+            <div class="fusion-copyright-notice">
+              <div>Copyright 2025 Community Fiber Network - an NPTech Company | 19066 Market St / PO Box 47, New Paris IN 46553</div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+</body>
+</html>

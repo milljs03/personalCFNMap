@@ -1,14 +1,43 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+
+html {
+    height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
-    min-height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    /* CHANGE 1: Ensure body takes up the full viewport height */
+    min-height: 100vh; 
+}
+
+.sorry-container {
+    max-width: 600px;
+    margin: 90px auto 20px auto; /* Adjust margin for spacing */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    /* CHANGE 2: Make this container grow to push the footer down */
+    flex-grow: 1; 
+}
+
+.footer-container {
+    background-color: #505050;
+    color: #fff;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    margin-top: 100px;
 }
 
 h2 {
@@ -46,16 +75,7 @@ h2 {
     margin-top: 8px;
 }
 
-.sorry-container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    margin-top: 90px;
-}
+
 
 form {
     display: flex;
@@ -101,26 +121,12 @@ button:active {
 }
 
 
-.footer-container {
-    background-color: #505050; /* Dark gray background */
-    color: #fff; /* White text color */
-    padding: 20px 20px; /* Padding for spacing */
-    width: 100%;
-    margin-top: 100px; /* Pushes footer to the bottom */
-    position: relative; /* Keeps it positioned normally within flow */
-    box-sizing: border-box; /* Includes padding in width calculation */
-}
-
-footer {
-    display: block;
-}
-
 
 .footer-container a {
-    color: #fff; /* White color for links */
-    text-decoration: none; /* Remove underline from links */
+    color: #fff;
+    text-decoration: none;
 }
 
 .footer-container a:hover {
-    text-decoration: underline; /* Add underline on hover for links */
+    text-decoration: underline;
 }

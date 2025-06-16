@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Interface</title>
+  <link rel="stylesheet" type="text/css" href="/mapfront/styling/file.css" />
+</head>
+
+<body>
+  <h1>
+    <img src="/mapfront/icons/community-fiber-logo.png" />
+  </h1>
+
+  <div id="map"></div>
+
+  <div id="map-controls">
+    <label class="switch">
+      <input type="checkbox" id="modeSwitch" onchange="toggleEditMode()" />
+      <div class="slider">
+        <img src="/mapfront/icons/view.png" class="view-icon" alt="View Icon" />
+        <img src="/mapfront/icons/edit.png" class="edit-icon" alt="Edit Icon" />
+      </div>
+    </label>
+
+    <button id="save-button" onclick="savePolygons()">
+      <img src="/mapfront/icons/save.png" style="width: 20px; height: 20px;" alt="Save Icon" />
+    </button>
+    <button onclick="setPointerCursor()">
+      <img src="/mapfront/icons/pointer.png" style="width: 20px; height: 20px;" />
+    </button>
+    <button onclick="enableDrawingMode()">
+      <img src="/mapfront/icons/triangle.png" style="width: 20px; height: 20px;" />
+    </button>
+    <button onclick="deleteSelectedPolygon()">
+      <img src="/mapfront/icons/eraser.png" style="width: 20px; height: 20px;" />
+    </button>
+
+    <div class="dropdown-menu">
+      <img src="/mapfront/icons/hardhat.png" style="width: 20px; height: 20px;" />
+    </div>
+
+    <select id="polygon-color" onchange="changePolygonColor()">
+      <option value="#BDB76B">Developing</option>
+      <option value="#00ff00">Completed</option>
+      <option value="#0000ff">Future</option>
+    </select>
+  </div>
+
+  <!-- Load the Wellknown library -->
+  <script src="https://unpkg.com/wellknown@0.6.1"></script>
+
+  <!-- Dynamically load Google Maps API key from server -->
+<script>
+  fetch('http://localhost:3000/api/config') // not 127.0.0.1:5501
+    .then(response => response.json())
+    .then(config => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${config.apiKey}&libraries=drawing&callback=initMap`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    })
+    .catch(error => {
+      console.error('Failed to load Google Maps API:', error);
+    });
+</script>
+
+
+  <!-- Your scripts -->
+  <script src="/mapfront/scripts/polygonentry.js"></script>
+  <script src="/mapfront/scripts/Main.js"></script>
+</body>
+
+</html>

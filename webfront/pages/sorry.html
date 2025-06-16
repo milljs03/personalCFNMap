@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorry - Address Not Available</title>
+    <link rel="stylesheet" href="/webfront/styling/sorry.css" />
+</head>
+<body>
+     <div class="header-placeholder"></div>
+    
+    <div class="sorry-container">
+        <h2>We're Sorry</h2>
+        <p>Unfortunately, we currently cannot provide service to your address. Please fill out the form below so we can double-check your address availability and notify you about future developments in your area!</p>
+        
+        <form id="infoForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            
+            <label for="phone">Phone #:</label>
+            <input type="phone" id="phone" name="phone" placeholder="Your Phone Number" required>
+            
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" readonly>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="footer-placeholder"></div>
+
+   <script>
+    // Get the address from the query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const address = urlParams.get('address');
+
+    // --- START: Sanitization Fix ---
+    const sanitizer = document.createElement('div');
+    sanitizer.textContent = address;
+    const sanitizedAddress = sanitizer.innerHTML;
+    // --- END: Sanitization Fix ---
+
+    // Use the sanitized address
+    document.getElementById('address').value = sanitizedAddress;
+
+    // Handle form submission
+    document.getElementById('infoForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        // The following line will result in an error as there's no 'email' field in the form.
+        // const email = document.getElementById('email').value; 
+        const phone = document.getElementById('phone').value;
+        const formAddress = document.getElementById('address').value;
+
+        // Send the data to the server
+        fetch('http://localhost:3000/submitForm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // Ensure you are sending the correct fields
+            body: JSON.stringify({ name, phone, address: formAddress }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Thank you! Your information has been submitted.');
+                window.location.href = 'index.html'; // Redirect back to the main page
+            } else {
+                alert('There was an error submitting your form.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error submitting your form.');
+        });
+    });
+</script>
+    
+</body>
+
+
+  
+  
+  <script src="/webfront/scripts/layout.js"></script>
+</div>
+</html>
