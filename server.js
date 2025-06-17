@@ -3,10 +3,19 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const path = require('path');
 const app = express();
 const port = 3000;
 const nodemailer = require('nodemailer');
+const path = require('path'); // Make sure path is required at the top of the file
+app.use(express.static(path.join(__dirname, 'webfront')));
+app.use('/mapfront', express.static(path.join(__dirname, 'mapfront')));
+
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.path}`);
+  next();
+});
+
+
 
 // --- NEW IMPORTS FOR AUTHENTICATION ---
 const session = require('express-session');
@@ -53,10 +62,10 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
 }));
 
-// Serve static files from the project root
-app.use(express.static(__dirname));
 
-// MySQL database connection pool setup
+
+
+
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -129,15 +138,14 @@ const transporter = nodemailer.createTransport({
 
 // --- ROUTES ---
 
-// Login page route
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'mapfront', 'pages', 'login.html'));
+    res.sendFile(path.join(__dirname, 'webfront', 'pages', 'login.html'));
 });
 
 // Handle login form submission
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/map', // Redirect to the map page on successful login
-    failureRedirect: '/login', // Redirect back to the login page on failure
+    failureRedirect: '/login?error=1', // Redirect back to the login page on failure
     failureFlash: false // You can enable this to show flash messages
 }));
 
@@ -151,8 +159,10 @@ app.post('/logout', (req, res, next) => {
 
 // Protected route for the map page
 app.get('/map', isAuthenticated, (req, res) => {
+    console.log(`Serving /map to user ${req.user.username}`);
     res.sendFile(path.join(__dirname, 'mapfront', 'pages', 'map.html'));
 });
+
 
 // Handle GET request to the root
 app.get('/', (req, res) => {
