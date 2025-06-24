@@ -32,16 +32,16 @@ A Dockerized Node.js + MySQL application for managing and visualizing fiber serv
 git clone https://github.com/milljs03/personalCFNMap.git
 cd personalCFNMap
 2. Create the .env File
-Copy the example and fill in your secrets:
+ the example and fill in your secrets:
 
 bash
-Copy
+
 Edit
 cp .env.example .env
 Example .env values:
 
 env
-Copy
+
 Edit
 DB_HOST=db
 DB_USER=cfn_user
@@ -54,7 +54,7 @@ API_KEY=your-api-key
 API_BASE_URL=http://localhost:3000
 3. Start the App with Docker
 bash
-Copy
+
 Edit
 docker compose up -d
 App: http://localhost:3000
@@ -65,14 +65,14 @@ MySQL: localhost:3306 (inside container is db:3306)
 To restore from a SQL dump (e.g. Dump20250206_fixed.sql):
 
 bash
-Copy
+
 Edit
 docker cp Dump20250206_fixed.sql cfn-map-db:/tmp/backup.sql
 docker exec -it cfn-map-db bash
 mysql -u root -p"$DB_PASSWORD" "$DB_NAME" < /tmp/backup.sql
 Project Structure
 graphql
-Copy
+
 Edit
 .
 ├── docker-compose.yml        # Main docker orchestration file
@@ -84,13 +84,13 @@ Edit
 Backup Instructions
 Create a Backup from Docker
 bash
-Copy
+
 Edit
 bash ./backup_db.sh
 Creates a timestamped file in /db_backups like:
 
 bash
-Copy
+
 Edit
 db_backups/mydb_backup_2025-06-23_14-45-00.sql
 Manual Backup via Workbench
@@ -103,12 +103,12 @@ To deploy on a public server (e.g. DigitalOcean, AWS, bare VPS):
 
 1. Install Docker and Docker Compose
 bash
-Copy
+
 Edit
 sudo apt update && sudo apt install docker.io docker-compose -y
 2. Clone the Repo and Set Up .env
 bash
-Copy
+
 Edit
 git clone https://github.com/milljs03/personalCFNMap.git
 cd personalCFNMap
@@ -116,14 +116,14 @@ cp .env.example .env
 nano .env  # Edit values
 3. Run the App
 bash
-Copy
+
 Edit
 docker compose up -d
 4. Set Up a Domain (Optional)
 Use Nginx or Caddy to point your domain to localhost:3000. Sample Nginx config:
 
 nginx
-Copy
+
 Edit
 server {
     listen 80;
@@ -152,6 +152,3 @@ Login doesn't work: Check session secret and DB user setup
 License
 MIT (c) 2025 Josiah Miller
 
-yaml
-Copy
-Edit
