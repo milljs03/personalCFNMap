@@ -17,6 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     // Load the header and footer from your new file paths
-    loadComponent('.header-placeholder', '/webfront/pages/_includes/_header.html');
-    loadComponent('.footer-placeholder', '/webfront/pages/_includes/_footer.html');
+    loadComponent('.header-placeholder', '/pages/_includes/_header.html');
+    loadComponent('.footer-placeholder', '/pages/_includes/_footer.html');
 });

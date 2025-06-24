@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Check Address</title>
-  <link rel="stylesheet" href="/webfront/styling/styles.css" />
+  <link rel="stylesheet" href="/styling/styles.css" />
 </head>
 <body class="page-index">
   <div class="header-placeholder" id="header-placeholder"></div>
@@ -125,14 +125,14 @@
     };
 
     function loadSorryPage(address) {
-      window.location.href = `sorry.html?address=${encodeURIComponent(address)}`;
+      window.location.href = `/pages/sorry.html?address=${encodeURIComponent(address)}`;
     }
 
     function loadPricingPage(address) {
-      window.location.href = `pricing.html?address=${encodeURIComponent(address)}`;
+      window.location.href = `/pages/pricing.html?address=${encodeURIComponent(address)}`;
     }
   </script>
 
-  <script src="/webfront/scripts/layout.js"></script>
+  <script src="/scripts/layout.js"></script>
 </body>
 </html>

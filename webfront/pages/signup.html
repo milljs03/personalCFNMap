@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up Details</title>
-<link rel="stylesheet" href="/webfront/styling/signup.css" />
+<link rel="stylesheet" href="/styling/signup.css" />
 </head>
 <body>
     <div class="header-placeholder"></div>
@@ -130,13 +130,6 @@
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
     const plan = document.getElementById('plan').value;  // Ensure this gets the selected plan
-    // Create URLSearchParams with proper key-value pairs
-    const formData = new URLSearchParams();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('address', address);
-    formData.append('plan', plan);
   
     // Send the data to the server
     fetch('http://localhost:3000/signup', {
@@ -146,7 +139,6 @@
     },
     body: JSON.stringify({ name, email, phone, address, plan }),
 })
-
     .then(response => response.json())
     .then(data => {
         if (data.success) {
@@ -163,9 +155,7 @@
 
 </script>
     <div class="footer-placeholder"></div>
+
+  <script src="/scripts/layout.js"></script>
 </body>
-
-
-<script src="/webfront/scripts/layout.js"></script>
-
 </html>

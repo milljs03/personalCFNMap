@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorry - Address Not Available</title>
-    <link rel="stylesheet" href="/webfront/styling/sorry.css" />
+    <link rel="stylesheet" href="/styling/sorry.css" />
 </head>
 <body>
      <div class="header-placeholder"></div>
@@ -48,8 +48,6 @@
         event.preventDefault();
 
         const name = document.getElementById('name').value;
-        // The following line will result in an error as there's no 'email' field in the form.
-        // const email = document.getElementById('email').value; 
         const phone = document.getElementById('phone').value;
         const formAddress = document.getElementById('address').value;
 
@@ -78,11 +76,6 @@
     });
 </script>
     
+  <script src="/scripts/layout.js"></script>
 </body>
-
-
-  
-  
-  <script src="/webfront/scripts/layout.js"></script>
-</div>
 </html>

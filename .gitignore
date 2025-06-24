@@ -41,6 +41,20 @@ lerna-debug.log*
 !.vscode/extensions.json
 *.code-workspace
 
-# Miscellaneous
+# Docker
+docker-compose.override.yml
+*.pid
+*.sock
+
+# MySQL
+/db_data/
+*.sql
+/var/lib/mysql/
+
+# System
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Windows backup folder
+Windows.old/
