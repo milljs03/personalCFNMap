@@ -1,41 +1,157 @@
-#CFN Map Query Application 
+# personalCFNMap
 
-##Version 1.0
+**Community Fiber Network Query & Management Tool**  
+A Dockerized Node.js + MySQL application for managing and visualizing fiber serviceability polygons.
 
-##Step by Step deployment 
+---
 
-1. **Clone the repository**
-   git clone https://github.com/seet-lab/CFN_Map_Query_Spring_2024.git
+## Features
 
-2. **Install depedencies**
-    npm install express
-    npm install mysql2
-    npm install cors
+- View and search serviceable addresses on a dynamic map
+- Store, query, and display custom polygon zones (e.g. `Future`, `Developing`, `Completed`)
+- Secure login system for internal access
+- Docker-based deployment with persistent MySQL storage
+- Backup and restore SQL data with ease
 
-In folder terminal type: node server.js
-   The below message should appear:
+---
 
-   Server is running on port 3000
+## Tech Stack
 
-3. **In mySQL when database mydb is set up, use the below queries to set up appropiate tables**
+- Frontend: HTML/CSS/JS (via `public/`)
+- Backend: Node.js + Express
+- Database: MySQL 8.0
+- Hosting: Docker + docker-compose
 
-CREATE TABLE IF NOT EXISTS polygons (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    polygon_geometry GEOMETRY NOT NULL,
-    color VARCHAR(255) NOT NULL,
-    tag VARCHAR(50) NOT NULL
-);
+---
 
-CREATE TABLE address_tags (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    address VARCHAR(255) NOT NULL,
-    tag VARCHAR(50) NOT NULL,
-    latitude DECIMAL(10, 8) NOT NULL,
-    longitude DECIMAL(11, 8) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+## Local Development Setup
 
+### 1. Clone the Repo
 
+```bash
+git clone https://github.com/milljs03/personalCFNMap.git
+cd personalCFNMap
+2. Create the .env File
+Copy the example and fill in your secrets:
 
+bash
+Copy
+Edit
+cp .env.example .env
+Example .env values:
 
- Download Live Server extension on visual studio or a similar extension on IDE of choice
+env
+Copy
+Edit
+DB_HOST=db
+DB_USER=cfn_user
+DB_PASSWORD=your-db-password
+DB_NAME=mydb
+SESSION_SECRET=your-session-secret
+EMAIL_SENDER=your@email.com
+EMAIL_PASSWORD=your-email-password
+API_KEY=your-api-key
+API_BASE_URL=http://localhost:3000
+3. Start the App with Docker
+bash
+Copy
+Edit
+docker compose up -d
+App: http://localhost:3000
+
+MySQL: localhost:3306 (inside container is db:3306)
+
+4. (Optional) Restore Polygon Data
+To restore from a SQL dump (e.g. Dump20250206_fixed.sql):
+
+bash
+Copy
+Edit
+docker cp Dump20250206_fixed.sql cfn-map-db:/tmp/backup.sql
+docker exec -it cfn-map-db bash
+mysql -u root -p"$DB_PASSWORD" "$DB_NAME" < /tmp/backup.sql
+Project Structure
+graphql
+Copy
+Edit
+.
+├── docker-compose.yml        # Main docker orchestration file
+├── server.js                 # Express backend
+├── .env.example              # Environment variable template
+├── public/                   # Frontend HTML/JS/CSS
+├── db_backups/               # Optional: store your SQL backups here
+└── init.sql (optional)       # Optional auto-init SQL on first run
+Backup Instructions
+Create a Backup from Docker
+bash
+Copy
+Edit
+bash ./backup_db.sh
+Creates a timestamped file in /db_backups like:
+
+bash
+Copy
+Edit
+db_backups/mydb_backup_2025-06-23_14-45-00.sql
+Manual Backup via Workbench
+Open MySQL Workbench → Server → Data Export
+
+Choose mydb → Dump structure and data → Export to .sql
+
+Production Deployment Guide
+To deploy on a public server (e.g. DigitalOcean, AWS, bare VPS):
+
+1. Install Docker and Docker Compose
+bash
+Copy
+Edit
+sudo apt update && sudo apt install docker.io docker-compose -y
+2. Clone the Repo and Set Up .env
+bash
+Copy
+Edit
+git clone https://github.com/milljs03/personalCFNMap.git
+cd personalCFNMap
+cp .env.example .env
+nano .env  # Edit values
+3. Run the App
+bash
+Copy
+Edit
+docker compose up -d
+4. Set Up a Domain (Optional)
+Use Nginx or Caddy to point your domain to localhost:3000. Sample Nginx config:
+
+nginx
+Copy
+Edit
+server {
+    listen 80;
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+Security Tips
+Never commit real .env files to GitHub
+
+Use Docker volumes (db_data) to persist data across restarts
+
+Use SSL (via Let’s Encrypt) for public deployments
+
+Troubleshooting
+MySQL won't start: Check if the volume is corrupted or port 3306 is in use
+
+No polygons showing: Make sure you restored the SQL dump properly
+
+Login doesn't work: Check session secret and DB user setup
+
+License
+MIT (c) 2025 Josiah Miller
+
+yaml
+Copy
+Edit
